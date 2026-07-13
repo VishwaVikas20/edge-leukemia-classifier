@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge AI Hardware Simulation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #1a1d20; color: #fff; font-family: monospace; }
+        
+        .hardware-container {
+            background: #212529;
+            border-radius: 10px;
+            padding: 40px 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #495057;
+            margin-bottom: 30px;
+        }
+
+        /* Chips */
+        .chip {
+            width: 120px;
+            height: 120px;
+            background: #2a2e33;
+            border: 2px solid #6c757d;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            text-align: center;
+            font-size: 0.75rem;
+            z-index: 2;
+            overflow: hidden; 
+            padding-top: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .chip img {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            border: 1px solid #495057;
+        }
+
+        .biochip { border-color: #dc3545; }
+        .adc { border-color: #ffc107; }
+        .sbc { border-color: #0dcaf0; }
+
+        /* Wires */
+        .wire {
+            height: 4px;
+            background: #495057;
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Data Packet Animation */
+        .data-packet {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            left: 0;
+            opacity: 0;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        /* Blood Drop */
+        .blood-drop {
+            width: 16px;
+            height: 16px;
+            background: #dc3545;
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            margin-left: -8px;
+            opacity: 0;
+        }
+
+        /* Animations */
+        .anim-drop { animation: dropBlood 1s ease-in forwards; }
+        @keyframes dropBlood {
+            0% { top: -40px; opacity: 1; }
+            100% { top: 30px; opacity: 0; transform: rotate(45deg) scale(2); }
+        }
+
+        .anim-pulse-bio { animation: pulseBio 0.5s infinite alternate; }
+        @keyframes pulseBio { to { box-shadow: 0 0 20px #dc3545; background: #dc3545; color: #fff;} }
+
+        .anim-pulse-adc { animation: pulseAdc 0.2s infinite alternate; }
+        @keyframes pulseAdc { to { box-shadow: 0 0 20px #ffc107; background: #ffc107; color: #000;} }
+
+        .anim-pulse-sbc { animation: pulseSbc 0.1s infinite alternate; }
+        @keyframes pulseSbc { to { box-shadow: 0 0 25px #0dcaf0; background: #0dcaf0; color: #000;} }
+
+        .anim-transmit { animation: transmitData 1s linear forwards; opacity: 1; }
+        @keyframes transmitData {
+            0% { left: 0; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        #results-card { display: none; background: #212529; border-color: #0dcaf0; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 text-center mb-4">
+            <h2 class="text-info">🧬 Hardware Inference Pipeline</h2>
+            <p class="text-secondary">Simulating End-to-End Diagnostic Architecture</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card bg-dark border-secondary mb-4">
+                <div class="card-body">
+                    <div class="d-flex gap-4 justify-content-center mb-3">
+                        <div class="form-check text-light">
+                            <input class="form-check-input" type="radio" name="inputType" id="useProfile" value="profile" checked>
+                            <label class="form-check-label" for="useProfile">Use Preset Profile</label>
+                        </div>
+                        <div class="form-check text-light">
+                            <input class="form-check-input" type="radio" name="inputType" id="useCsv" value="csv">
+                            <label class="form-check-label" for="useCsv">Upload Custom CSV</label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-3 justify-content-center">
+                        <select id="patientSelect" class="form-select bg-dark text-light border-secondary" style="max-width: 400px;">
+                            <option value="1">Patient Profile A (Unknown)</option>
+                            <option value="2">Patient Profile B (Unknown)</option>
+                            <option value="3">Patient Profile C (Unknown)</option>
+                        </select>
+                        
+                        <input type="file" id="csvUpload" class="form-control bg-dark text-light border-secondary d-none" accept=".csv" style="max-width: 400px;">
+                        
+                        <button id="startBtn" class="btn btn-info px-4 fw-bold">Initiate Test</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hardware-container shadow">
+                <div class="chip biochip" id="chip-bio">
+                    <div class="blood-drop" id="blood"></div>
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Microfluidics.jpg" alt="CMOS Biochip">
+                    CMOS Biochip
+                </div>
+                
+                <div class="wire">
+                    <div class="data-packet" id="packet1" style="background:#dc3545; box-shadow: 0 0 10px #dc3545;"></div>
+                </div>
+
+                <div class="chip adc" id="chip-adc">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/16bit_ADC_Card.jpg" alt="16-bit ADC">
+                    16-bit ADC
+                </div>
+
+                <div class="wire">
+                    <div class="data-packet" id="packet2" style="background:#ffc107; box-shadow: 0 0 10px #ffc107;"></div>
+                </div>
+
+                <div class="chip sbc" id="chip-sbc">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Raspberry_Pi_4_Model_B_-_Side.jpg" alt="Raspberry Pi Edge SBC">
+                    Edge SBC
+                </div>
+            </div>
+
+            <div class="text-center mb-4 text-secondary fw-bold" id="statusLog" style="height: 24px;">SYSTEM IDLE</div>
+
+            <div class="card shadow-sm" id="results-card">
+                <div class="card-body text-center text-light">
+                    <h5 class="card-title text-info mb-3">Diagnostic Output Generated</h5>
+                    <h1 class="display-3 fw-bold" id="res-diagnosis">--</h1>
+                    <p class="lead mb-3">Primary Confidence: <span id="res-confidence" class="fw-bold">--</span></p>
+                    
+                    <div class="row justify-content-center mb-4 text-secondary" style="font-size: 0.85rem;">
+                        <div class="col-12 mb-2 text-uppercase" style="letter-spacing: 1px;">Full Class Distribution</div>
+                        <div class="col-auto">Healthy: <span class="text-light" id="prob-Healthy">--</span></div>
+                        <div class="col-auto border-start border-secondary">ALL: <span class="text-light" id="prob-ALL">--</span></div>
+                        <div class="col-auto border-start border-secondary">AML: <span class="text-light" id="prob-AML">--</span></div>
+                        <div class="col-auto border-start border-secondary">CLL: <span class="text-light" id="prob-CLL">--</span></div>
+                        <div class="col-auto border-start border-secondary">CML: <span class="text-light" id="prob-CML">--</span></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-4 text-secondary border-top border-secondary pt-3">
+                        <div>Hardware Compute Time: <span id="res-time" class="text-light fw-bold">--</span></div>
+                        <div>Features Extracted: <span class="text-light fw-bold">54,630</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle UI based on Radio Button Selection
+    document.querySelectorAll('input[name="inputType"]').forEach((elem) => {
+        elem.addEventListener('change', function(event) {
+            if (event.target.value === 'profile') {
+                document.getElementById('patientSelect').classList.remove('d-none');
+                document.getElementById('csvUpload').classList.add('d-none');
+            } else {
+                document.getElementById('patientSelect').classList.add('d-none');
+                document.getElementById('csvUpload').classList.remove('d-none');
+            }
+        });
+    });
+
+    document.getElementById('startBtn').addEventListener('click', async function() {
+        const inputType = document.querySelector('input[name="inputType"]:checked').value;
+        const log = document.getElementById('statusLog');
+        
+        // Prepare data payload based on selection
+        let fetchOptions = { method: 'POST' };
+        
+        if (inputType === 'csv') {
+            const fileInput = document.getElementById('csvUpload');
+            if (fileInput.files.length === 0) {
+                alert("Please select a CSV file to continue.");
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            fetchOptions.body = formData;
+        } else {
+            const patientId = document.getElementById('patientSelect').value;
+            fetchOptions.headers = {'Content-Type': 'application/json'};
+            fetchOptions.body = JSON.stringify({patient_id: patientId});
+        }
+
+        // Reset UI
+        document.getElementById('results-card').style.display = 'none';
+        
+        const blood = document.getElementById('blood');
+        const biochip = document.getElementById('chip-bio');
+        const packet1 = document.getElementById('packet1');
+        const adc = document.getElementById('chip-adc');
+        const packet2 = document.getElementById('packet2');
+        const sbc = document.getElementById('chip-sbc');
+
+        // Cleanup old animations
+        blood.classList.remove('anim-drop');
+        biochip.classList.remove('anim-pulse-bio');
+        packet1.classList.remove('anim-transmit');
+        adc.classList.remove('anim-pulse-adc');
+        packet2.classList.remove('anim-transmit');
+        sbc.classList.remove('anim-pulse-sbc');
+
+        // Step 1: Blood Drop
+        log.innerText = "[1/4] Applying sample to microarray...";
+        void blood.offsetWidth; // trigger reflow
+        blood.classList.add('anim-drop');
+
+        setTimeout(() => {
+            // Step 2: Biochip reads voltages
+            biochip.classList.add('anim-pulse-bio');
+            log.innerText = "[2/4] Biochemical reaction altering impedance. Transmitting analog voltages...";
+            packet1.classList.add('anim-transmit');
+
+            setTimeout(() => {
+                // Step 3: ADC conversion
+                biochip.classList.remove('anim-pulse-bio');
+                adc.classList.add('anim-pulse-adc');
+                log.innerText = "[3/4] ADC digitizing 54,630 features. Sending via SPI bus...";
+                
+                setTimeout(() => {
+                    packet2.classList.add('anim-transmit');
+                }, 500);
+
+                setTimeout(async () => {
+                    // Step 4: Edge SBC Inference
+                    adc.classList.remove('anim-pulse-adc');
+                    sbc.classList.add('anim-pulse-sbc');
+                    log.innerText = "[4/4] SBC calculating probabilities via ElasticNet pipeline...";
+
+                    try {
+                        const response = await fetch('/predict', fetchOptions);
+                        const data = await response.json();
+
+                        setTimeout(() => {
+                            sbc.classList.remove('anim-pulse-sbc');
+                            
+                            if (data.error) {
+                                log.innerText = "SYSTEM ERROR: " + data.error;
+                                alert("Error processing input: " + data.error);
+                                return;
+                            }
+                            
+                            log.innerText = "INFERENCE COMPLETE.";
+                            
+                            // Parse the confidence string (e.g., "33.33%") into a float
+                            const maxConfidence = parseFloat(data.confidence);
+
+                            // Clinical Guardrail: If confidence is under 50%, trigger safety warning
+                            if (maxConfidence < 50.0) {
+                                document.getElementById('res-diagnosis').innerText = "INCONCLUSIVE";
+                                document.getElementById('res-diagnosis').classList.add("text-warning");
+                                
+                                document.getElementById('res-confidence').innerHTML = `
+                                    <span class="text-warning">${data.confidence}</span>
+                                    <div class="alert alert-danger mt-3 mb-0 py-2 fs-6 text-start" role="alert" style="letter-spacing: normal;">
+                                        ⚠️ <strong>Clinical Override:</strong> Model confidence is too low for a definitive diagnostic classification. Immediate pathological review and real-world blood panel recommended.
+                                    </div>
+                                `;
+                            } else {
+                                // Standard high-confidence output
+                                document.getElementById('res-diagnosis').innerText = data.diagnosis;
+                                document.getElementById('res-diagnosis').classList.remove("text-warning");
+                                document.getElementById('res-confidence').innerHTML = `<span class="text-warning">${data.confidence}</span>`;
+                            }
+
+                            document.getElementById('res-time').innerText = data.time_ms;
+                            
+                            // Map the newly added array of probabilities
+                            document.getElementById('prob-Healthy').innerText = data.all_probs['Healthy'];
+                            document.getElementById('prob-ALL').innerText = data.all_probs['ALL'];
+                            document.getElementById('prob-AML').innerText = data.all_probs['AML'];
+                            document.getElementById('prob-CLL').innerText = data.all_probs['CLL'];
+                            document.getElementById('prob-CML').innerText = data.all_probs['CML'];
+
+                            document.getElementById('results-card').style.display = 'block';
+                        }, 800); 
+
+                    } catch (error) {
+                        log.innerText = "SYSTEM ERROR";
+                        sbc.classList.remove('anim-pulse-sbc');
+                    }
+                }, 1500); 
+            }, 1000); 
+        }, 1000); 
+    });
+</script>
+</body>
+</html>
