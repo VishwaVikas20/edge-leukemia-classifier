@@ -1,5 +1,6 @@
-GSE13159_series_matrix.txt.gz
-Leukemia_5Class_Dataset.csv
-
-.venv/
-.DS_Store
+# Ignore Heavy Datasets & Data Matrices
+*.csv
+*.txt.gz
+*.txt
+ModelMaking/GSE13159_series_matrix.txt.gz
+ModelMaking/Leukemia_5Class_Dataset.csv
