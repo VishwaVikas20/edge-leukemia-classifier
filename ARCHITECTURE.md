@@ -25,7 +25,7 @@ Why did we choose an ElasticNet-regularized linear model over a Deep Neural Netw
 * **Cloud Components:** None.
 * **Local Components:** Entire stack operates at local level.
 
-* ## 4. Hardware Economics: The "Bare Silicon" Advantage
+## 4. Hardware Economics: The "Bare Silicon" Advantage
 A critical design decision in this architecture was bypassing commercial biotechnology monopolies to achieve a true edge-native solution. 
 
 Commercial diagnostic hardware currently operates on a closed-ecosystem model. For example, proprietary CMOS sequencing kits like the Ion Torrent 550 cost upwards of ₹4,56,713, and standard microarray chips like the Affymetrix U133 Plus 2.0 cost up to ₹71,000 per unit. These prices are artificially inflated to subsidize closed-source medical software and heavy sequencing rigs.
