@@ -28,10 +28,7 @@ While this architecture is not intended to completely replace comprehensive labo
 * **Hardware Integrated:** It is not just a local web app; it uses the `spidev` library to read live electrical signals straight from the Raspberry Pi's GPIO pins.
 * **Local Serving:** It serves a local clinical dashboard on `0.0.0.0` for Phones/Tablets/Desktops/Laptops connected to the same local WiFi network as rasberry pi, bypassing the broader internet completely.
 
-## 🗂️ Repository Architecture
-This project is cleanly separated into three distinct environments:
 
-```text
 📦 edge-leukemia-classifier
  ┣ 📂 EdgeDeviceDeployment      # Physical SBC hardware logic (spidev)
  ┃ ┣ 📜 app.py                  # Main edge inference script
@@ -48,7 +45,6 @@ This project is cleanly separated into three distinct environments:
  ┣ 📜 .gitignore
  ┣ 📜 LICENSE                   # MIT Open Source License
  ┗ 📜 README.md
-
 
 ## 🚀 How Others Can Run or Try It (Setup & Usage)
 
