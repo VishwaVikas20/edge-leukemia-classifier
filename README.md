@@ -30,6 +30,9 @@ We built an offline-first, hardware-integrated clinical pipeline that bridges th
 A patient's processed blood sample is applied to a CMOS biochip, where hybridized RNA alters the chip's electrical impedance. These micro-voltage changes are digitized by a 16-bit SPI ADC and transmitted directly to a Raspberry Pi. The Pi then executes an ultra-lightweight, 54,630-feature ElasticNet inference entirely offline in under 2 milliseconds, serving the final diagnostic results directly to the doctor via a locally hosted web dashboard.
 
 ## 🚨 Why It Matters
+
+**The Economic Impact & Shattering the Hardware Monopoly:** If you search the market today, closed-ecosystem microarray chips (like the Affymetrix Human Genome U133 Plus 2.0 or Ion Torrent 550 kits) cost anywhere from ₹37,000 to ₹4,56,000 because they are locked behind proprietary, million-rupee sequencing machines. However, the raw silicon manufacturing cost of a bare [CMOS microfluidic biochip](https://indianexpress.com/article/technology/science/scientists-develop-lab-on-a-chip-that-costs-less-than-a-rupee-4512241) is merely ₹50 to ₹100. By decoupling the bare silicon sensor from proprietary medical hardware and connecting it directly to an open-source Raspberry Pi via SPI, our architecture brings the compute overhead per test down to essentially **₹0**.
+
 A traditional Comprehensive Leukemia Diagnostic Panel (using Flow Cytometry, PCR, or Next-Generation Sequencing) in India currently costs patients anywhere from ₹10,000 to ₹33,000 and takes days to process at a centralized lab.
 
 On the other hand, thanks to recent manufacturing breakthroughs, a mass-produced disposable CMOS microfluidic biochip cartridge can cost as little as ₹50 to ₹100 to produce. Since the Raspberry Pi is a reusable device doing all the computation locally, the software cost per test drops to ₹0. resulting in the total cost estimated around ₹500.
