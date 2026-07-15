@@ -52,7 +52,13 @@ To deploy the true offline architecture on a clinical edge device:
 Pending
 
 ## 📸 Screenshots
-Pending
+<img width="2916" height="1746" alt="Image 15-07-26 at 1 15 PM" src="https://github.com/user-attachments/assets/c325bb97-31ac-439d-92aa-9f726be74deb" />
+
+<img width="2916" height="1774" alt="Image 15-07-26 at 1 16 PM" src="https://github.com/user-attachments/assets/e0d33715-e227-410c-af84-ecae9fbd5f39" />
+
+<img width="2916" height="1774" alt="Image 15-07-26 at 1 17 PM" src="https://github.com/user-attachments/assets/ffab81ca-9daf-43f8-8f3e-943b1cb30a79" />
+
+
 
 ---
 ## 📜 License & Open Source
