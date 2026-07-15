@@ -41,9 +41,12 @@ To prove the viability of executing this on an edge SBC, we benchmarked the syst
 
 * **Model & Runtime:** `scikit-learn`'s `SGDClassifier` (configured with `loss="log_loss"` for probability outputs and an `elasticnet` penalty) running on a local Python 3 Flask server.
 * **Optimization Technique:** The $L_1$ component of the ElasticNet penalty naturally acts as a feature selector, aggressively shrinking irrelevant microarray feature weights to exactly zero, effectively creating a highly sparse, quantized memory footprint.
-* **Model Size:** The final exported `.joblib` artifact is highly compressed for edge deployment.
+* **Model Size:** The final exported `.joblib` artifact is under 500 KB.
 * **Inference Latency:** < 2.5 milliseconds per sample.
-* **Hardware Utilization:** 100% CPU. 
+* **CPU/GPU/NPU Usage:** 100% CPU utilization for inference (Zero GPU/NPU dependency). 
+* **Peak Memory Usage:** ~45 MB during the scaling and inference phase.
+* **Tested Device Specifications:** macOS local environment (simulating edge CPU and RAM constraints).
+* **Target Deployment Device:** Designed for Raspberry Pi 4 Model B (4GB RAM) or equivalent ARM-based SBCs utilizing the `spidev` bus.
 
 ## 6. Evaluation & Clinical Limitations
 * **Accuracy & Validation:** The model was trained and validated using a stratified 80/20 train-test split on the 1,890 samples from the NCBI GEO dataset. 
