@@ -6,6 +6,25 @@
 
 
 ## What We Built
+
+# 🩸 The Medical Context: What is Leukemia?
+Leukemia is a cancer of the body's blood-forming tissues, including the bone marrow and the lymphatic system. Traditional diagnosis requires invasive bone marrow biopsies and expensive multi-day flow cytometry analysis. 
+
+Our model acts as an immediate point-of-care triage tool, classifying physical blood impedance data into one of five distinct genomic profiles:
+* **Healthy:** Normal genomic baseline.
+* **ALL (Acute Lymphoblastic Leukemia):** Rapidly progressing cancer of the lymphoid line (common in children).
+* **AML (Acute Myeloid Leukemia):** Rapidly progressing cancer of the myeloid line.
+* **CLL (Chronic Lymphocytic Leukemia):** Slow-growing lymphoid cancer.
+* **CML (Chronic Myeloid Leukemia):** Slow-growing myeloid cancer.
+
+## 🔒 Local AI Verification & Privacy
+* **100% On-Device Execution:** All analog-to-digital conversions, data scaling, and ElasticNet model inferences run purely on the local SBC's CPU. 
+* **Zero Internet Dependency:** The system does not ping external APIs or cloud providers (e.g., AWS, GCP). 
+* **Patient Privacy:** No patient genomic data or inference results ever leave the physical device, ensuring out-of-the-box HIPAA and local privacy compliance.
+
+## 📥 Sample Inputs & 📤 Expected Outputs
+* **Input:** A raw 1D array containing 54,630 digital floating-point voltage values (ranging between 0.0V and 3.3V) polled via the SPI bus from the physical CMOS Biochip.
+* **Output:** A JSON payload containing the definitive diagnosis, the absolute confidence percentage, a full 5-class probability distribution, and the on-device inference latency (in milliseconds).
 We built an offline-first, hardware-integrated clinical pipeline that bridges the gap between biological microarrays and physical edge computing. It compresses a heavy 54,630-feature genomic dataset into an ultra-lightweight ElasticNet model capable of running entirely offline on a Raspberry Pi Edge SBC in expected under 2 milliseconds(for inference).
 
 A patient's processed blood sample is applied to a CMOS biochip, where hybridized RNA alters the chip's electrical impedance. These micro-voltage changes are digitized by a 16-bit SPI ADC and transmitted directly to a Raspberry Pi. The Pi then executes an ultra-lightweight, 54,630-feature ElasticNet inference entirely offline in under 2 milliseconds, serving the final diagnostic results directly to the doctor via a locally hosted web dashboard.
