@@ -94,7 +94,7 @@ To deploy the true offline architecture on a clinical edge device:
 ---
 
 ## 🎥 Demo Video
-Pending
+Click this to watch demo video : [Demo Video](https://drive.google.com/file/d/14jVNCco_SAk39lLJH1mEjIR3oiajOF5q/view?usp=sharing)
 
 ## 📸 Screenshots
 <img width="2916" height="1746" alt="Image 15-07-26 at 1 15 PM" src="https://github.com/user-attachments/assets/c325bb97-31ac-439d-92aa-9f726be74deb" />
