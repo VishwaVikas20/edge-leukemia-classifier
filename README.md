@@ -60,6 +60,8 @@ Pending
 
 <img width="2916" height="1774" alt="Image 15-07-26 at 1 17 PM" src="https://github.com/user-attachments/assets/ffab81ca-9daf-43f8-8f3e-943b1cb30a79" />
 
+If not used in the Edge device with Linux in it 
+<img width="1172" height="400" alt="Image 15-07-26 at 1 29 PM" src="https://github.com/user-attachments/assets/c0a85d83-b0ce-4175-9b8d-0eadf8e7e415" />
 
 
 ---
