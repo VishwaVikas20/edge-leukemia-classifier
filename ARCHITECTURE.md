@@ -23,7 +23,7 @@ Why did we choose an ElasticNet-regularized linear model over a Deep Neural Netw
 
 ## 3. Local / Cloud Components
 * **Cloud Components:** None.
-* **Local Components:** 100% of the stack (Hardware I/O, Web Server, Data Scaler, Machine Learning Model, UI rendering) operates on the edge device.
+* **Local Components:** Entire stack operates at local level.
 
 * ## 4. Hardware Economics: The "Bare Silicon" Advantage
 A critical design decision in this architecture was bypassing commercial biotechnology monopolies to achieve a true edge-native solution. 
@@ -31,5 +31,7 @@ A critical design decision in this architecture was bypassing commercial biotech
 Commercial diagnostic hardware currently operates on a closed-ecosystem model. For example, proprietary CMOS sequencing kits like the Ion Torrent 550 cost upwards of ₹4,56,713, and standard microarray chips like the Affymetrix U133 Plus 2.0 cost up to ₹71,000 per unit. These prices are artificially inflated to subsidize closed-source medical software and heavy sequencing rigs.
 
 Our architecture disrupts this by using a bare-metal approach:
-* **Open Hardware Interfacing:** Instead of relying on closed sequencers, we interface directly with mass-produced, unbranded CMOS microfluidic sensors whose raw manufacturing cost is sub-₹100 (leveraging standard foundry lithography).
+
+* **Open Hardware Interfacing:** Instead of relying on closed sequencers, we interface directly with mass-produced, unbranded CMOS microfluidic sensors. Based on [Stanford University's "Lab-on-a-Chip" manufacturing breakthroughs](https://indianexpress.com/article/technology/science/scientists-develop-lab-on-a-chip-that-costs-less-than-a-rupee-4512241/), leveraging standard foundry lithography and inkjet deposition brings the raw silicon cost down to sub-₹100 (and often as low as ₹1 at scale).
+
 * **Direct SPI Readout:** By tapping the micro-voltages directly through a 16-bit ADC into the Raspberry Pi's `spidev` bus, we completely bypass the need for proprietary reader hardware. All signal processing and ElasticNet inference happens natively on the open-source Linux SBC.
