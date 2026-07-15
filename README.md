@@ -7,7 +7,7 @@
 
 ## What We Built
 
-# 🩸 The Medical Context: What is Leukemia?
+### 🩸 The Medical Context: What is Leukemia?
 Leukemia is a cancer of the body's blood-forming tissues, including the bone marrow and the lymphatic system. Traditional diagnosis requires invasive bone marrow biopsies and expensive multi-day flow cytometry analysis. 
 
 Our model acts as an immediate point-of-care triage tool, classifying physical blood impedance data into one of five distinct genomic profiles:
